@@ -46,11 +46,11 @@ for i in range(len(total_gold_sorted)):
 data_sorted = np.column_stack((data_sorted, total_gold_sorted))
 
 #phân tích dữ liệu
-mean_total_gold = np.mean(total_gold_sorted)
-median_total_gold = np.median(total_gold_sorted)
-std_dev_total_gold = np.std(total_gold_sorted)
-min_total_gold = np.min(total_gold_sorted)
-max_total_gold = np.max(total_gold_sorted)
+mean_total_medals = np.mean(total_medals)
+median_total_medals = np.median(total_medals)
+std_dev_total_medals = np.std(total_medals)
+min_total_medals = np.min(total_medals)
+max_total_medals = np.max(total_medals)
 
 mean_gold = np.mean(gold)
 median_gold = np.median(gold)
@@ -90,13 +90,14 @@ print(f"Trung bình huy chương đồng: {mean_bronze:.2f}")
 print(f"Trung vị huy chương đồng: {median_bronze:.2f}")
 print(f"Độ lệch chuẩn huy chương đồng: {std_dev_bronze:.2f}")
 print(f"Huy chương đồng ít nhất: {min_bronze}")
-print(f"Huy chương đồng nhiều nhất: {max_bronze}")
+print(f"Huy chương đồng nhiều nhất: {max_bronze}\n")
 
-print(f"Trung bình tổng số huy chương: {mean_total_gold:.2f}")
-print(f"Trung vị tổng số huy chương: {median_total_gold:.2f}")
-print(f"Độ lệch chuẩn tổng số huy chương: {std_dev_total_gold:.2f}")
-print(f"Quốc gia có số huy chương ít nhất: {min_total_gold}")
-print(f"Quốc gia có số huy chương nhiều nhất: {max_total_gold}")
+print("Thống kê cho tổng số huy chương :")
+print(f"Trung bình tổng số huy chương : {mean_total_medals:.2f}")
+print(f"Trung vị tổng số huy chương : {median_total_medals:.2f}")
+print(f"Độ lệch chuẩn tổng số huy chương : {std_dev_total_medals:.2f}")
+print(f"nước có tổng số huy chương ít nhất: {min_total_medals}")
+print(f"nước tổng số huy chương nhiều nhất: {max_total_medals}\n")
 
 # Thêm tiêu đề cho cột "Total_Gold"
 headers.append('Total_Gold')
