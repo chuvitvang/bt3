@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Đọc dữ liệu từ file CSV
 df = pd.read_csv("C:/Users/Admin/Downloads/dulieu.csv")
@@ -38,6 +40,28 @@ std_dev_bronze = np.std(Bronze)
 min_bronze = np.min(Bronze)
 max_bronze = np.max(Bronze)
 
+#vẽ biểu đồ
+plt.figure(figsize=(10, 5))
+plt.bar(['Gold', 'Silver', 'Bronze'], [np.sum(Gold), np.sum(Silver), np.sum(Bronze)], color=['gold', 'silver', '#cd7f32'])
+plt.title('Total Medals Count')
+plt.xlabel('Medal Type')
+plt.ylabel('Count')
+plt.show()
+
+# Tạo pie chart (biểu đồ tròn) thể hiện tỉ lệ phân bố huy chương
+plt.figure(figsize=(8, 8))
+plt.pie([np.sum(Gold), np.sum(Silver), np.sum(Bronze)], labels=['Gold', 'Silver', 'Bronze'], autopct='%1.1f%%', colors=['gold', 'silver', '#cd7f32'])
+plt.title('Medal Distribution')
+plt.show()
+
+# Tạo histogram (biểu đồ histogram) cho tổng số huy chương mỗi quốc gia
+plt.figure(figsize=(10, 6))
+sns.histplot(total_medals, bins=10, kde=True, color='teal')
+plt.title('Distribution of Total Medals')
+plt.xlabel('Total Medals')
+plt.ylabel('Frequency')
+plt.show()
+
 # Thêm cột Total_Gold và Total_medals vào DataFrame chính
 df['Total_Gold'] = Total_Gold
 df['Total_medals'] = total_medals
@@ -54,6 +78,5 @@ stats_df = pd.DataFrame(stats_data, index=['Mean', 'Median', 'Std Dev', 'Min', '
 
 # Gộp DataFrame chính với DataFrame chứa thống kê dưới dạng hàng mới
 df_combined = pd.concat([df, stats_df.reset_index().rename(columns={'index': 'Metric'})], ignore_index=True)
-
 # Lưu dữ liệu vào file CSV
 df_combined.to_csv("C:/Users/Admin/Downloads/dulieu_final.csv", index=False)
