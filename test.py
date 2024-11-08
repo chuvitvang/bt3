@@ -1,109 +1,59 @@
 import numpy as np
-import csv
-import matplotlib.pyplot as plt
+import pandas as pd
 
-# Tải dữ liệu từ file CSV
-with open("C:/Users/Admin/Downloads/dulieu.csv", newline='', encoding='utf-8') as csvfile:
-    reader = csv.reader(csvfile)
-    data = list(reader)
+# Đọc dữ liệu từ file CSV
+df = pd.read_csv("C:/Users/Admin/Downloads/dulieu.csv")
 
-# Giả sử dòng đầu tiên là tiêu đề
-headers = data[0]
-data = np.array(data[1:], dtype=object)  # Bỏ tiêu đề và chuyển dữ liệu còn lại thành mảng numpy
+# Lấy dữ liệu từ các cột vào các mảng
+Gold = df['Gold'].values.astype(float)
+Silver = df['Silver'].values.astype(float)
+Bronze = df['Bronze'].values.astype(float)
 
-# Xác định chỉ số cột "Rank" (giả sử cột này đã tồn tại)
-rank_col_index = headers.index('Rank')
+# Tính tổng huy chương vàng và tổng huy chương
+Total_Gold = Gold + Silver / 2 + Bronze / 3
+total_medals = Gold + Silver + Bronze
 
-# Chuyển các cột liên quan sang kiểu float (giả định 'Silver', 'Bronze', 'Gold' nằm ở cột 2, 3, 4)
-countries = data[:, 1]
-silver = data[:, 2].astype(float)
-bronze = data[:, 3].astype(float)
-gold = data[:, 4].astype(float)
-
-# Tính Total Gold
-total_gold = gold + silver / 2 + bronze / 3
-
-# Tính Tổng medals
-total_medals = gold + silver + bronze
-
-
-
-# Sắp xếp dữ liệu theo Total Gold (giảm dần)
-sorted_indices = np.argsort(-total_gold)
-data_sorted = data[sorted_indices]  # Sắp xếp lại dữ liệu dựa trên chỉ số
-total_gold_sorted = total_gold[sorted_indices]
-
-# Cập nhật cột "Rank" có sẵn
-rank = 1
-for i in range(len(total_gold_sorted)):
-    if i > 0 and total_gold_sorted[i] == total_gold_sorted[i - 1]:
-        data_sorted[i, rank_col_index] = data_sorted[i - 1, rank_col_index]  # Giữ nguyên hạng cho các giá trị bằng nhau
-    else:
-        data_sorted[i, rank_col_index] = str(rank)
-    rank += 1
-
-# Thêm cột "Total_Gold" vào dữ liệu đã sắp xếp
-data_sorted = np.column_stack((data_sorted, total_gold_sorted))
-
-#phân tích dữ liệu
+# Tính các chỉ số thống kê cơ bản
 mean_total_medals = np.mean(total_medals)
 median_total_medals = np.median(total_medals)
 std_dev_total_medals = np.std(total_medals)
 min_total_medals = np.min(total_medals)
 max_total_medals = np.max(total_medals)
 
-mean_gold = np.mean(gold)
-median_gold = np.median(gold)
-std_dev_gold = np.std(gold)
-min_gold = np.min(gold)
-max_gold = np.max(gold)
+mean_gold = np.mean(Gold)
+median_gold = np.median(Gold)
+std_dev_gold = np.std(Gold)
+min_gold = np.min(Gold)
+max_gold = np.max(Gold)
 
-mean_silver = np.mean(silver)
-median_silver = np.median(silver)
-std_dev_silver = np.std(silver)
-min_silver = np.min(silver)
-max_silver = np.max(silver)
+mean_silver = np.mean(Silver)
+median_silver = np.median(Silver)
+std_dev_silver = np.std(Silver)
+min_silver = np.min(Silver)
+max_silver = np.max(Silver)
 
-mean_bronze = np.mean(bronze)
-median_bronze = np.median(bronze)
-std_dev_bronze = np.std(bronze)
-min_bronze = np.min(bronze)
-max_bronze = np.max(bronze)
+mean_bronze = np.mean(Bronze)
+median_bronze = np.median(Bronze)
+std_dev_bronze = np.std(Bronze)
+min_bronze = np.min(Bronze)
+max_bronze = np.max(Bronze)
 
-# In kết quả thống kê
-print("Thống kê cho huy chương vàng:")
-print(f"Trung bình huy chương vàng: {mean_gold:.2f}")
-print(f"Trung vị huy chương vàng: {median_gold:.2f}")
-print(f"Độ lệch chuẩn huy chương vàng: {std_dev_gold:.2f}")
-print(f"Huy chương vàng ít nhất: {min_gold}")
-print(f"Huy chương vàng nhiều nhất: {max_gold}\n")
+# Thêm cột Total_Gold và Total_medals vào DataFrame chính
+df['Total_Gold'] = Total_Gold
+df['Total_medals'] = total_medals
 
-print("Thống kê cho huy chương bạc:")
-print(f"Trung bình huy chương bạc: {mean_silver:.2f}")
-print(f"Trung vị huy chương bạc: {median_silver:.2f}")
-print(f"Độ lệch chuẩn huy chương bạc: {std_dev_silver:.2f}")
-print(f"Huy chương bạc ít nhất: {min_silver}")
-print(f"Huy chương bạc nhiều nhất: {max_silver}\n")
+# Tạo DataFrame chứa các kết quả thống kê
+stats_data = {
+    'Gold': [mean_gold, median_gold, std_dev_gold, min_gold, max_gold],
+    'Silver': [mean_silver, median_silver, std_dev_silver, min_silver, max_silver],
+    'Bronze': [mean_bronze, median_bronze, std_dev_bronze, min_bronze, max_bronze],
+    'Total_Gold': ['', '', '', '', ''],
+    'Total_medals': [mean_total_medals, median_total_medals, std_dev_total_medals, min_total_medals, max_total_medals]
+}
+stats_df = pd.DataFrame(stats_data, index=['Mean', 'Median', 'Std Dev', 'Min', 'Max'])
 
-print("Thống kê cho huy chương đồng:")
-print(f"Trung bình huy chương đồng: {mean_bronze:.2f}")
-print(f"Trung vị huy chương đồng: {median_bronze:.2f}")
-print(f"Độ lệch chuẩn huy chương đồng: {std_dev_bronze:.2f}")
-print(f"Huy chương đồng ít nhất: {min_bronze}")
-print(f"Huy chương đồng nhiều nhất: {max_bronze}\n")
+# Gộp DataFrame chính với DataFrame chứa thống kê dưới dạng hàng mới
+df_combined = pd.concat([df, stats_df.reset_index().rename(columns={'index': 'Metric'})], ignore_index=True)
 
-print("Thống kê cho tổng số huy chương :")
-print(f"Trung bình tổng số huy chương : {mean_total_medals:.2f}")
-print(f"Trung vị tổng số huy chương : {median_total_medals:.2f}")
-print(f"Độ lệch chuẩn tổng số huy chương : {std_dev_total_medals:.2f}")
-print(f"nước có tổng số huy chương ít nhất: {min_total_medals}")
-print(f"nước tổng số huy chương nhiều nhất: {max_total_medals}\n")
-
-# Thêm tiêu đề cho cột "Total_Gold"
-headers.append('Total_Gold')
-# Lưu dữ liệu đã sắp xếp vào file CSV
-output_filename = "C:/Users/Admin/Downloads/final_data_array.csv"
-with open(output_filename, mode='w', newline='', encoding='utf-8') as csvfile:
-    writer = csv.writer(csvfile)
-    writer.writerow(headers)  # Ghi tiêu đề
-    writer.writerows(data_sorted)  # Ghi dữ liệu đã sắp xếp
+# Lưu dữ liệu vào file CSV
+df_combined.to_csv("C:/Users/Admin/Downloads/dulieu_final.csv", index=False)
