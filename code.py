@@ -58,3 +58,5 @@ plt.show()  # Hiển thị tất cả các biểu đồ
 df_combined = pd.concat([df, stats_df.reset_index().rename(columns={'index': 'Metric'})], ignore_index=True)  # Kết hợp các thống kê vào DataFrame chính
 # Lưu kết quả vào file CSV
 df_combined.to_csv("C:/Users/Admin/Downloads/dulieu_final.csv", index=False)  # Lưu dữ liệu vào file CSV
+
+print("Chương trình của nhóm 7 - DH23HM")
